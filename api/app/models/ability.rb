@@ -7,11 +7,11 @@ class Ability
     user ||= Customer.new
 
     if user&.class == Customer
-      can :manage, Customer, id: customer.id
+      can :manage, Customer, id: user.id
       can :read, Product
       can :read, Delivery
-      can :manage, Cart, customer_id: customer.id
-      can :manage, Order, customer_id: customer.id
+      can :manage, Cart, customer_id: user.id
+      can :manage, Order, customer_id: user.id
     end
   end
 end
