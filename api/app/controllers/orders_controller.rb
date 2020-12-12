@@ -14,7 +14,10 @@ class OrdersController < APIBaseController
   def show
     @order = Order.find(params[:id])
     render json: @order.to_json(include: {
-                                  products: {}
+                                  orders_products: {only: %i[quantity],
+                                    include:{
+                                      product:{}
+                                    }}
                                 })
   end
   
@@ -22,15 +25,22 @@ class OrdersController < APIBaseController
     unless @cart.products.empty?
       @order = Order.new(
         value: @cart.value,
-        user_id: current_customer.id
+        quantity: @cart.quantity,
+        customer_id: current_customer.id
       )
-      @order.products << @cart.products
+      @cart.carts_products.each do |carts_product|
+        @order.orders_products.new(product: carts_product.product, quantity: carts_product.quantity).save
+      end
       @cart.products.delete_all
       @cart.value = 0
+      @cart.quantity = 0
       @order.save
       @cart.save
       render json: @order.to_json(include: {
-                                    products: {}
+                                    orders_products: {only: %i[quantity],
+                                      include:{
+                                        product:{}
+                                      }}
                                   })
     else
       render json:{"cart": "empty"}, status: 400

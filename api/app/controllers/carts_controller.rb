@@ -4,8 +4,11 @@ class CartsController < APIBaseController
 
   def show
     render json: @cart.to_json(include: {
-                                  products: {}
-                                })
+                                carts_products: { only: %i[quantity],
+                                include:{
+                                  product:{}
+                                }},
+                              })
   end
 
   def add
