@@ -14,5 +14,5 @@ Rails.application.routes.draw do
   end 
 
   post :admin_token, to: 'admin_token#create'
-  resource :admin, except: :destroy, :create
+  resource :admin, except: %i[destroy create]
 end
