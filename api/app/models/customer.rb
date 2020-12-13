@@ -5,9 +5,20 @@ class Customer < ApplicationRecord
   has_many :orders
   has_secure_password
 
+  def to_token_payload
+    {
+      sub: id,
+      class: self.class.to_s
+    }
+  end
+
   def self.from_token_request(request)
     email = request.params&.[]('auth')&.[]('email')
     find_by email: email
+  end
+
+  def self.from_token_payload(payload)
+    find(payload['sub']) if payload['sub'] && payload['class'] && payload['class'] == to_s
   end
 
   def admin?

@@ -1,0 +1,32 @@
+АВТОРИЗАЦИЯ КЛИЕНТА                 customer_token POST   /customer_token(.:format)     customer_token#create
+ПРОФИЛЬ КЛИЕНТА                     customer       GET    /customer(.:format)           customers#show
+ДЛЯ АДМИНА РЕДАЧИТЬ КЛИЕТА                         PATCH  /customer(.:format)           customers#update
+ДЛЯ АДМИНА РЕДАЧИТЬ КЛИЕТА                         PUT    /customer(.:format)           customers#update
+ДЛЯ АДМИНА УДАЛИТЬ КЛИЕНТА                         DELETE /customer(.:format)           customers#destroy
+РЕГИСТРАЦИЯ КЛИЕНТА                                POST   /customer(.:format)           customers#create
+ВЫБРАТЬ СПОСОБ ДОСТАВКИ{"delivery_id"::id}         PUT    /cart/delivery(.:format)      carts#delivery
+ПОЛУЧИТЬ СВОЮ КОРЗИНУ                         cart GET    /cart(.:format)               carts#show
+ДОБАВИТЬ ТОВАР В КОРЗИНУ{"product_id"::id}         PATCH  /cart(.:format)               carts#update
+ДОБАВИТЬ ТОВАР В КОРЗИНУ{"product_id"::id}         PUT    /cart(.:format)               carts#update
+УДАЛИТЬ ТОВАР ИЗ КОРЗИНЫ{"product_id"::id}         DELETE /cart(.:format)               carts#destroy
+ПОЛУЧИТЬ ВСЕ ПРОДУКТЫ                     products GET    /products(.:format)           products#index
+ДЛЯ АДМИНА СОЗДАТЬ ПРОДУКТ                         POST   /products(.:format)           products#create
+ПОЛУЧИТЬ КОНКРЕТНЫЙ ПРОДУКТ ПО ID          product GET    /products/:id(.:format)       products#show
+ДЛЯ АДМИНА РЕДАЧИТЬ ПРОДУКТ                        PATCH  /products/:id(.:format)       products#update
+ДЛЯ АДМИНА РЕДАЧИТЬ ПРОДУКТ                        PUT    /products/:id(.:format)       products#update
+ДЛЯ АДМИНА УДАЛИТЬ ПРОДУКТ                         DELETE /products/:id(.:format)       products#destroy
+ПОЛУЧИТЬ ВСЕ СПОСОБЫ ДОСТАВКИ           deliveries GET    /deliveries(.:format)         deliveries#index
+ДЛЯ АДМИНА СОЗДАТЬ СПОСОБ ДОСТАВКИ                         POST   /deliveries(.:format)         deliveries#create
+ПОЛУЧИТЬ КОНКРЕТНЫЙ СПОСОБ ДОСТАВКИ ПО ID  delivery GET    /deliveries/:id(.:format)     deliveries#show
+ДЛЯ АДМИНА РЕДАЧИТЬ СПОСОБ ДОСТАВКИ                PATCH  /deliveries/:id(.:format)     deliveries#update
+ДЛЯ АДМИНА РЕДАЧИТЬ СПОСОБ ДОСТАВКИ                PUT    /deliveries/:id(.:format)     deliveries#update
+ДЛЯ АДМИНА УДАЛИТЬ СПОСОБ ДОСТАВКИ                 DELETE /deliveries/:id(.:format)     deliveries#destroy
+ДЛЯ АДМИНА ПОДТВЕРДИТЬ ЗАКАЗ         confirm_order PUT    /orders/:id/confirm(.:format) orders#confirm
+ПОЛУЧИТЬ ВСЕ СВОИ ЗАКАЗЫ(АДМИН/КЛИЕТ)       orders GET    /orders(.:format)             orders#index
+СОЗДАТЬ ЗАКАЗ ИЗ КОРЗИНЫ                           POST   /orders(.:format)             orders#create
+ПОЛУЧИТЬ КОНКРЕТНЫЙ ЗАКАЗ ИНФОРМАТИВНЫЙ      order GET    /orders/:id(.:format)         orders#show
+ДЛЯ АДМИНА УДАЛИТЬ ЗАКАЗ                           DELETE /orders/:id(.:format)         orders#destroy
+АВТОРИЗАЦИЯ АДМИНА                     admin_token POST   /admin_token(.:format)        admin_token#create
+ПОЛУЧИТЬ ПРОФИЛЬ АДМИНА                      admin GET    /admin(.:format)              admins#show
+РЕДАКТИРОВАТЬ СЕБЯ(АДМИНА)                         PATCH  /admin(.:format)              admins#update
+РЕДАКТИРОВАТЬ СЕБЯ(АДМИНА)                         PUT    /admin(.:format)              admins#update
