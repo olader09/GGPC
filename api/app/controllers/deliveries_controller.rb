@@ -1,6 +1,6 @@
 class DeliveriesController < APIBaseController
-  authorize_resource except: %i[index show]
-  before_action :auth_user, except: %i[index show]
+  authorize_resource
+  before_action :auth_user
 
   def index
     deliveries = Delivery.all.order(:id)
@@ -51,7 +51,7 @@ class DeliveriesController < APIBaseController
   protected
 
   def default_delivery_fields
-    %i[ price ]
+    %i[ price name ]
   end
 
   def update_delivery_params

@@ -3,12 +3,7 @@ class CartsController < APIBaseController
   before_action :auth_user, :load_cart
 
   def show
-    render json: @cart.to_json(include: {
-                                carts_products: { only: %i[quantity],
-                                include:{
-                                  product:{}
-                                }},
-                              })
+    render json: full_cart_in_json
   end
 
   #Добавление продукта в корзину
@@ -24,12 +19,7 @@ class CartsController < APIBaseController
     @cart.quantity += 1
     @cart.value += product.price
     @cart.save
-    render json: @cart.to_json(include: {
-                                carts_products: { only: %i[quantity],
-                                include:{
-                                  product:{}
-                                }},
-                              })
+    render json: full_cart_in_json
   end
   
   #Удаления продукта из корзины
@@ -50,18 +40,34 @@ class CartsController < APIBaseController
     @cart.quantity -= 1
     @cart.value -= product.price
     @cart.save
-    render json: @cart.to_json(include: {
-                                  carts_products: { only: %i[quantity],
-                                  include:{
-                                    product:{}
-                                  }},
-                                }) 
+    render json: full_cart_in_json
+  end
+
+  def delivery
+    delivery = Delivery.find(params[:delivery_id])
+    @cart.value -= @cart.delivery.price
+    @cart.delivery = delivery
+    @cart.value += delivery.price
+    @cart.save
+    render json: full_cart_in_json
   end
 
 
   protected
+
   def load_cart
     @cart = current_customer.cart
+  end
+
+  def full_cart_in_json
+    @cart.to_json(except: :delivery_id,
+                      include: { 
+                      delivery:{only: %i[id name price]},
+                      carts_products: { only: %i[quantity],
+                        include:{
+                          product:{}
+                        }},
+                    })  
   end
   
 end

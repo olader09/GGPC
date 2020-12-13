@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20201213112220) do
+ActiveRecord::Schema.define(version: 20201213125420) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,7 +28,9 @@ ActiveRecord::Schema.define(version: 20201213112220) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "quantity", default: 0
+    t.bigint "delivery_id"
     t.index ["customer_id"], name: "index_carts_on_customer_id"
+    t.index ["delivery_id"], name: "index_carts_on_delivery_id"
   end
 
   create_table "carts_products", force: :cascade do |t|
@@ -60,6 +62,7 @@ ActiveRecord::Schema.define(version: 20201213112220) do
     t.decimal "price", precision: 10, scale: 2
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name", null: false
   end
 
   create_table "orders", force: :cascade do |t|
@@ -69,7 +72,9 @@ ActiveRecord::Schema.define(version: 20201213112220) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "confirmed", default: false
+    t.bigint "delivery_id"
     t.index ["customer_id"], name: "index_orders_on_customer_id"
+    t.index ["delivery_id"], name: "index_orders_on_delivery_id"
   end
 
   create_table "orders_products", force: :cascade do |t|

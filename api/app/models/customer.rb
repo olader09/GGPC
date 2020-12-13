@@ -18,7 +18,7 @@ class Customer < ApplicationRecord
   private
   
   def create_cart
-    Cart.create(customer_id: id, value: 0)
+    Cart.create(customer_id: id, value: 0, delivery_id: 1)
   end
 
   end

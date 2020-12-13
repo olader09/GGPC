@@ -19,12 +19,7 @@ class OrdersController < APIBaseController
     else
         @order = Order.find(params[:id])
     end
-    render json: @order.to_json(include: {
-                                  orders_products: {only: %i[quantity],
-                                    include:{
-                                      product:{}
-                                    }}
-                                })
+    render json: full_order_in_json
   end
   
   def create
@@ -32,6 +27,7 @@ class OrdersController < APIBaseController
       @order = Order.new(
         value: @cart.value,
         quantity: @cart.quantity,
+        delivery: @cart.delivery,
         customer_id: current_customer.id
       )
       @cart.carts_products.each do |carts_product|
@@ -42,31 +38,32 @@ class OrdersController < APIBaseController
       @cart.quantity = 0
       @order.save
       @cart.save
-      render json: @order.to_json(include: {
-                                    orders_products: {only: %i[quantity],
-                                      include:{
-                                        product:{}
-                                      }}
-                                  })
+      render json: full_order_in_json
     else
       render json:{"cart": "empty"}, status: 400
     end
   end
 
   def confirm
-    order = Order.find(params[:id])
-    order.update(confirmed: true)
-    render json: order.to_json(include: {
-                                orders_products: {only: %i[quantity],
-                                  include:{
-                                    product:{}
-                                  }}
-                              })
+    @order = Order.find(params[:id])
+    @order.update(confirmed: true)
+    render json: full_order_in_json
   end
   
   private
   
   def load_cart
     @cart = current_customer.cart if current_customer.present?
+  end
+
+  def full_order_in_json
+    @order.to_json(except: :delivery_id,
+                      include: { 
+                        delivery:{only: %i[id name price]},
+                        orders_products: { only: %i[quantity],
+                          include:{
+                            product:{}
+                          }},
+                    })  
   end
 end
