@@ -31,6 +31,10 @@ class CartsController < APIBaseController
                               })
   end
 
+  def remove
+  
+  end
+
 
   protected
   def load_cart

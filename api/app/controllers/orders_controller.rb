@@ -3,11 +3,20 @@ class OrdersController < APIBaseController
   before_action :auth_user, :load_cart
 
   def index
-    orders = current_customer.orders
-    if orders.empty?
-      render json: {}, status: 204
+    unless current_admin.present?
+      orders = current_customer.orders
+      if orders.empty?
+        render status: 204
+      else
+        render json: orders
+      end
     else
-      render json: orders
+      orders = Order.all.order(id: :desc)
+      if orders.empty?
+        render status: 204
+      else
+        render json: orders
+      end
     end
   end
 
@@ -46,10 +55,21 @@ class OrdersController < APIBaseController
       render json:{"cart": "empty"}, status: 400
     end
   end
+
+  def confirm
+    order = Order.find(params[:id])
+    order.update(confirmed: true)
+    render json: order.to_json(include: {
+                                orders_products: {only: %i[quantity],
+                                  include:{
+                                    product:{}
+                                  }}
+                              })
+  end
   
   private
   
   def load_cart
-    @cart = current_customer.cart
+    @cart = current_customer.cart if current_customer.present?
   end
 end

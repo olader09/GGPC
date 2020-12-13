@@ -53,7 +53,7 @@ class ProductsController < APIBaseController
   protected
 
   def default_product_fields
-    %i[ name category_id description value picture ]
+    %i[ name description price picture ]
   end
 
   def update_product_params

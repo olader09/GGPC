@@ -7,6 +7,10 @@ Rails.application.routes.draw do
   end
 
   resources :products
+  resources :orders do
+    put :confirm, to: 'orders#confirm', on: :member
+  end 
 
-  resources :orders
+  post :admin_token, to: 'admin_token#create'
+  resource :admin
 end
