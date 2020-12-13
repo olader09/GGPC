@@ -17,7 +17,6 @@ class Ability
       can :manage, Customer
       can :manage, Product
       can :manage, Delivery
-      can :manage, Cart
       can :manage, Order
     end
   end

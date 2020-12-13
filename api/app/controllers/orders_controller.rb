@@ -5,23 +5,20 @@ class OrdersController < APIBaseController
   def index
     unless current_admin.present?
       orders = current_customer.orders
-      if orders.empty?
-        render status: 204
-      else
-        render json: orders
-      end
+      return render status: 204 if orders.empty?
     else
       orders = Order.all.order(id: :desc)
-      if orders.empty?
-        render status: 204
-      else
-        render json: orders
-      end
+      return render status: 204 if orders.empty?
     end
+    render json: orders
   end
 
   def show
-    @order = Order.find(params[:id])
+    unless current_admin.present?
+      @order = current_customer.orders.find(params[:id])
+    else
+        @order = Order.find(params[:id])
+    end
     render json: @order.to_json(include: {
                                   orders_products: {only: %i[quantity],
                                     include:{

@@ -11,8 +11,9 @@ class CartsController < APIBaseController
                               })
   end
 
-  def add
-    product = Product.find(params[:id])
+  #Добавление продукта в корзину
+  def update
+    product = Product.find(params[:product_id])
     if @cart.products.include?(product)
       carts_product = @cart.carts_products.find_by(product: product)
       carts_product.quantity += 1
@@ -30,9 +31,31 @@ class CartsController < APIBaseController
                                 }},
                               })
   end
-
-  def remove
   
+  #Удаления продукта из корзины
+  def destroy
+    product = Product.find(params[:product_id])
+    if @cart.products.include?(product)
+      carts_product = @cart.carts_products.find_by(product: product)
+      if carts_product.quantity > 1
+        carts_product.quantity -= 1 
+        carts_product.save
+      else
+        @cart.products.delete(product)
+      end
+    else
+      render json: {error: "This product does not exist in you cart."}, status: :bad_request
+      return
+    end
+    @cart.quantity -= 1
+    @cart.value -= product.price
+    @cart.save
+    render json: @cart.to_json(include: {
+                                  carts_products: { only: %i[quantity],
+                                  include:{
+                                    product:{}
+                                  }},
+                                }) 
   end
 
 
