@@ -21,7 +21,8 @@ class ProductsController < APIBaseController
   end
 
   def update
-    @product = Product.find(params[:id]).update(update_product_params)
+    @product = Product.find(params[:id])
+    @product.update(update_product_params)
     if @product.errors.blank?
       render json: @product, status: :ok
     else
